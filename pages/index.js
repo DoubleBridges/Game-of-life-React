@@ -3,7 +3,7 @@ import Head from "next/head";
 export default function Home() {
   return (
     <main className="flex flex-col h-screen">
-      <header className="w-full h-32 bg-red-800 shadow-2xl text-white font-extrabold flex justify-center">
+      <header className="w-full h-32 bg-blue-800 shadow-2xl text-white font-extrabold flex justify-center">
         <h1 className="h-full text-center py-2 text-6xl">
           Conway's Game of Life
         </h1>
