@@ -3,7 +3,7 @@ import produce from "immer";
 
 import Presets from "../dummyDb/presets";
 
-const operations = [
+const positions = [
   [0, 1],
   [0, -1],
   [1, -1],
@@ -27,6 +27,7 @@ export default function Grid() {
   });
 
   const { gridSize, speed } = gridProps;
+
   const generateEmptyGrid = (size) => {
     const rows = [];
     for (let i = 0; i < size; i++) {
@@ -41,9 +42,14 @@ export default function Grid() {
 
   const [running, setRunning] = useState(false);
 
+  // Holds a reference to the running state
   const runningRef = useRef(running);
   runningRef.current = running;
 
+  // Runs the grid through lifecycle, useCallback returns a memoized version of the function
+  //  preventing rerenders when we don't want them
+  // immer.produce() creates a copy of the grid to run our algorithm on
+  // setTimeout "recursively" calls the function at the set interval
   const runSimulation = useCallback(() => {
     if (!runningRef.current) {
       return;
@@ -54,7 +60,7 @@ export default function Grid() {
         for (let i = 0; i < gridSize; i++) {
           for (let k = 0; k < gridSize; k++) {
             let neighbors = 0;
-            operations.forEach(([x, y]) => {
+            positions.forEach(([x, y]) => {
               const newI = i + x;
               const newK = k + y;
               if (
@@ -80,6 +86,7 @@ export default function Grid() {
     setTimeout(runSimulation, speed);
   }, []);
 
+  // Used to step the grid through the lifecycle one generation at a time
   const stepGrid = useCallback(() => {
     if (runningRef.current) {
       setRunning(false);
@@ -90,7 +97,7 @@ export default function Grid() {
         for (let i = 0; i < gridSize; i++) {
           for (let k = 0; k < gridSize; k++) {
             let neighbors = 0;
-            operations.forEach(([x, y]) => {
+            positions.forEach(([x, y]) => {
               const newI = i + x;
               const newK = k + y;
               if (
@@ -112,10 +119,9 @@ export default function Grid() {
         }
       });
     });
-
-    // setTimeout(runSimulation, speed);
   }, []);
 
+  // Set the grid to the patterm chosen in the presets dropdown
   const setGridToPreset = () => {
     running && setRunning(!running);
     setGrid(Presets[`${gridForm.preset}`]);
