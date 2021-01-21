@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "immer": "^7.0.1",
+    "immer": "^8.0.1",
     "next": "9.4.4",
     "postcss-preset-env": "^6.7.0",
     "react": "16.13.1",
